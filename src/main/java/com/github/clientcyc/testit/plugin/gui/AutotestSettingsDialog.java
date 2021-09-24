@@ -1,39 +1,34 @@
-package com.github.jaqat.testit.plugin.gui;
+package com.github.clientcyc.testit.plugin.gui;
 
-import com.github.jaqat.testit.plugin.settings.AutotestDialogSettings;
-import com.intellij.ide.util.PropertiesComponent;
+import com.github.clientcyc.testit.plugin.settings.AutotestDialogSettings;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AutotestSettingsDialog extends DialogWrapper {
     private JPanel contentPane;
-    //private JButton buttonOK;
-    //private JButton buttonCancel;
     private JRadioButton autotestExternalIdManualValueRadioButton;
     private JRadioButton autotestExternalIdRandomUUIDRadioButton;
     private JTextField autotestExternalIdField;
-    private JTextField manualTestsIdsField;
+    private JTextField lecsManualTestsIdsField;
+    private JTextField pmolManualTestsIdsField;
 
     AutotestDialogSettings autotestDialogSettings;
-    private PropertiesComponent properties;
-    private Project project;
 
     public AutotestSettingsDialog(Project project, AutotestDialogSettings autotestDialogSettings) {
         super(project);
         init();
         setModal(true);
         initDialog();
-        setTitle("Test-It autotest properties");
+        setTitle("Clientcyc Test-It Autotest Properties");
         this.autotestDialogSettings = autotestDialogSettings;
 
         autotestExternalIdManualValueRadioButton.addActionListener(actionEvent -> {
@@ -70,15 +65,18 @@ public class AutotestSettingsDialog extends DialogWrapper {
         } else {
             autotestDialogSettings.setAutotestExternalId(autotestExternalIdField.getText());
         }
-        autotestDialogSettings.setManualTestsIds(
-                manualTestsIdsField.getText().trim().isEmpty() ?
-                        Collections.EMPTY_LIST :
-                        Stream.of(
-                                manualTestsIdsField.getText().split(",")
-                        )
-                                .map(String::trim)
-                                .collect(Collectors.toList())
-        );
+        autotestDialogSettings.setLecsManualTestsIds(splitManualIds(lecsManualTestsIdsField));
+        autotestDialogSettings.setPmolManualTestsIds(splitManualIds(pmolManualTestsIdsField));
+    }
+
+    private List<String> splitManualIds(JTextField manualIds) {
+        return manualIds.getText().trim().isEmpty() ?
+                Collections.emptyList() :
+                Stream.of(
+                        manualIds.getText().split(",")
+                )
+                        .map(String::trim)
+                        .collect(Collectors.toList());
     }
 
     @Nullable

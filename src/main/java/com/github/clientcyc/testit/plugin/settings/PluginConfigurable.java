@@ -1,6 +1,6 @@
-package com.github.jaqat.testit.plugin.settings;
+package com.github.clientcyc.testit.plugin.settings;
 
-import com.github.jaqat.testit.plugin.gui.PluginSettingsForm;
+import com.github.clientcyc.testit.plugin.gui.PluginSettingsForm;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
@@ -22,7 +22,7 @@ public class PluginConfigurable implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "Test-It Plugin";
+        return "Clientcyc Test-It Plugin";
     }
 
     @Nullable

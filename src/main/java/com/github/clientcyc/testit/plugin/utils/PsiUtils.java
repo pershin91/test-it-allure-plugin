@@ -1,4 +1,4 @@
-package com.github.jaqat.testit.plugin.utils;
+package com.github.clientcyc.testit.plugin.utils;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

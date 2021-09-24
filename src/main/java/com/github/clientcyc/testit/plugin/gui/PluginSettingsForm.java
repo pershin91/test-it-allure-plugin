@@ -1,7 +1,7 @@
-package com.github.jaqat.testit.plugin.gui;
+package com.github.clientcyc.testit.plugin.gui;
 
-import com.github.jaqat.testit.api.client.TestItApiClientBuilder;
-import com.github.jaqat.testit.plugin.settings.PluginSettings;
+import com.github.clientcyc.testit.plugin.settings.PluginSettings;
+import com.github.clientcyc.testit.api.client.TestItApiClientBuilder;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+        maven { url 'https://dl.bintray.com/jetbrains/intellij-plugin-service' }
     }
 }
 
@@ -10,8 +10,8 @@ plugins {
     id 'org.jetbrains.intellij' version '0.7.3'
 }
 
-group 'com.github.jaqat'
-version '1.1'
+group 'com.github.clientcyc'
+version '1.0'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
@@ -35,7 +35,7 @@ apply plugin: 'idea'
 intellij {
     version = '2019.2'
     plugins = ['properties', 'java', 'com.intellij.java']
-    pluginName 'TestIt Allure annotations plugin'
+    pluginName 'Clientcyc TestIt Allure annotations plugin'
     updateSinceUntilBuild = false
 
     patchPluginXml {

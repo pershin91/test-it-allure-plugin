@@ -1,9 +1,9 @@
-package com.github.jaqat.testit.api;
+package com.github.clientcyc.testit.api;
 
-import com.github.jaqat.testit.api.client.TestItApiClientBuilder;
-import com.github.jaqat.testit.api.model.AutoTest;
-import com.github.jaqat.testit.api.model.WorkItem;
-import com.github.jaqat.testit.plugin.settings.PluginSettings;
+import com.github.clientcyc.testit.api.client.TestItApiClientBuilder;
+import com.github.clientcyc.testit.api.model.AutoTest;
+import com.github.clientcyc.testit.plugin.settings.PluginSettings;
+import com.github.clientcyc.testit.api.model.WorkItem;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;

@@ -1,4 +1,4 @@
-package com.github.jaqat.testit.api.client;
+package com.github.clientcyc.testit.api.client;
 
 class TestItApiException extends RuntimeException {
 

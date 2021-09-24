@@ -1,6 +1,6 @@
-package com.github.jaqat.testit.api.client;
+package com.github.clientcyc.testit.api.client;
 
-import com.github.jaqat.testit.api.ITestItApiClient;
+import com.github.clientcyc.testit.api.ITestItApiClient;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;

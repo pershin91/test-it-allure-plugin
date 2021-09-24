@@ -1,8 +1,8 @@
-package com.github.jaqat.testit.plugin.actions;
+package com.github.clientcyc.testit.plugin.actions;
 
-import com.github.jaqat.testit.plugin.AnnotationProcessor;
-import com.github.jaqat.testit.plugin.gui.AutotestSettingsDialog;
-import com.github.jaqat.testit.plugin.settings.AutotestDialogSettings;
+import com.github.clientcyc.testit.plugin.AnnotationProcessor;
+import com.github.clientcyc.testit.plugin.gui.AutotestSettingsDialog;
+import com.github.clientcyc.testit.plugin.settings.AutotestDialogSettings;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;

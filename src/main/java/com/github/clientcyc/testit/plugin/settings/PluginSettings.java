@@ -1,4 +1,4 @@
-package com.github.jaqat.testit.plugin.settings;
+package com.github.clientcyc.testit.plugin.settings;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;

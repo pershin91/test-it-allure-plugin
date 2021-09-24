@@ -1,4 +1,4 @@
-package com.github.jaqat.testit.api.model;
+package com.github.clientcyc.testit.api.model;
 
 import lombok.Data;
 
