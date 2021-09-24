@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>com.github.clientcyc.clientcyc-test-it-idea-plugin</id>
-    <name>Clientcyc Test-It Allure Annotations</name>
+    <id>com.github.clientcyc.test-it-idea-plugin</id>
+    <name>Test-It Autotest Annotations Custom ClientCycle</name>
     <vendor/>
 
     <depends>com.intellij.modules.platform</depends>
@@ -9,16 +9,16 @@
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable
                 groupId="tools"
-                displayName="Clientcyc Test-It Plugin"
-                id="preferences.Clientcyc.PluginConfigurable"
+                displayName="Test-It Plugin Custom ClientCycle"
+                id="TestIt.ClientCycle.Preferences.PluginConfigurable"
                 instance="com.github.clientcyc.testit.plugin.settings.PluginConfigurable"/>
         <projectService serviceImplementation="com.github.clientcyc.testit.plugin.settings.PluginSettings"/>
     </extensions>
 
     <actions>
-        <action id="TestIt.Clientcyc.Create.Autotest.Action"
+        <action id="TestIt.ClientCycle.Create.Autotest.Action"
                 class="com.github.clientcyc.testit.plugin.actions.AddTestItAutoTestAnnotationsAction"
-                text="Clientcyc Test-It Autotest Annotations">
+                text="Test-It Autotest Annotations Custom ClientCycle">
             <add-to-group group-id="GenerateGroup" anchor="first"/>
         </action>
     </actions>

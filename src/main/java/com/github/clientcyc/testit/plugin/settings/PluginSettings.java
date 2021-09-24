@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-		name = "PluginSettings",
+		name = "PluginSettings custom",
 		storages = {@Storage("settings.xml")}
 )
 public class PluginSettings implements PersistentStateComponent<PluginSettings> {

@@ -28,7 +28,7 @@ public class AutotestSettingsDialog extends DialogWrapper {
         init();
         setModal(true);
         initDialog();
-        setTitle("Clientcyc Test-It Autotest Properties");
+        setTitle("Test-It Autotest Properties");
         this.autotestDialogSettings = autotestDialogSettings;
 
         autotestExternalIdManualValueRadioButton.addActionListener(actionEvent -> {

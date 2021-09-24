@@ -22,7 +22,7 @@ public class PluginConfigurable implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "Clientcyc Test-It Plugin";
+        return "Test-It Plugin";
     }
 
     @Nullable
