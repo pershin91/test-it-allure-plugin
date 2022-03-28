@@ -14,7 +14,6 @@ public class PluginSettingsForm {
 
     private JTextField url;
     private JTextField apiKey;
-    private JTextField projectId;
 
     private JTextField statusField;
     private JButton testButton;
@@ -30,7 +29,6 @@ public class PluginSettingsForm {
         settings = PluginSettings.getInstance(project);
         apiKey.setText(Objects.requireNonNull(settings).getApiKey());
         url.setText(settings.getServerUrl());
-        projectId.setText(String.valueOf(settings.getProjectId()));
     }
 
     private void handleTestButton() {
@@ -62,22 +60,18 @@ public class PluginSettingsForm {
     public void apply() {
         settings.setApiKey(apiKey.getText());
         settings.setServerUrl(url.getText());
-        settings.setProjectId(Integer.parseInt(projectId.getText()));
     }
 
     public void reset() {
         apiKey.setText(settings.getApiKey());
         url.setText(settings.getServerUrl());
-        projectId.setText(String.valueOf(settings.getProjectId()));
         statusField.setVisible(false);
         statusField.setText("");
     }
 
     public boolean isModified() {
-        Integer projectId = Integer.parseInt(this.projectId.getText());
         boolean modified = !apiKey.getText().equals(settings.getApiKey());
         modified |= !url.getText().equals(settings.getServerUrl());
-        modified |= !projectId.equals(settings.getProjectId());
         return modified;
     }
 }
