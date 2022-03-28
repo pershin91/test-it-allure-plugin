@@ -9,4 +9,5 @@ public class AutotestDialogSettings {
     private String autotestExternalId;
     private List<String> lecsManualTestsIds;
     private List<String> pmolManualTestsIds;
+    private List<String> moleManualTestsIds;
 }

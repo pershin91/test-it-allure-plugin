@@ -1,7 +1,10 @@
 package com.github.clientcyc.testit.plugin;
 
-import com.github.clientcyc.testit.plugin.settings.AutotestDialogSettings;
 import com.github.clientcyc.testit.api.TestItApiWrapper;
+import com.github.clientcyc.testit.plugin.constants.AllureAnnotation;
+import com.github.clientcyc.testit.plugin.constants.TestFrameworkAnnotation;
+import com.github.clientcyc.testit.plugin.constants.TestItProjects;
+import com.github.clientcyc.testit.plugin.settings.AutotestDialogSettings;
 import com.github.clientcyc.testit.plugin.utils.PsiUtils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -17,70 +20,38 @@ import static java.lang.String.format;
 
 public class AnnotationProcessor {
 
-    static final String ALLURE_MANUAL_LINK_ANNOTATION = "utils.testit.ManualLink";
-    static final String ALLURE_TMS_LINK_ANNOTATION = "io.qameta.allure.TmsLink";
+    public static void createAutoTestAnnotations(PsiMethod psiMethod, AutotestDialogSettings autotestSettings) {
 
-    static final String TEST_IT_PROJECTS = "utils.testit.TestItProjects";
-    static final String TEST_IT_PROJECT_LECS = "utils.testit.TestItProjects.LECS";
-    static final String TEST_IT_PROJECT_PMOL = "utils.testit.TestItProjects.PMOL";
+        PsiAnnotation tmsLinkAnnotation =
+                createTmsLinkAnnotation(psiMethod, autotestSettings.getAutotestExternalId());
 
-    static final String JUNIT5_TEST_ANNOTATION = "org.junit.jupiter.api.Test";
-    static final String TESTNG_TEST_ANNOTATION = "org.testng.annotations.Test";
+        List<PsiAnnotation> lecsLinkAnnotations =
+                createManualLinkAnnotations(psiMethod, TestItProjects.LECS, autotestSettings.getLecsManualTestsIds());
 
-    private static PsiAnnotation createTmsLinkAnnotation(PsiMethod method, String autotestUuid) {
-        return PsiUtils.createAnnotation(
-                format("@%s(\"%s\")", ALLURE_TMS_LINK_ANNOTATION, autotestUuid),
-                method
-        );
-    }
+        List<PsiAnnotation> pmolLinkAnnotations =
+                createManualLinkAnnotations(psiMethod, TestItProjects.PMOL, autotestSettings.getPmolManualTestsIds());
 
-    public static List<PsiAnnotation> lecsCreateLinkAnnotations(PsiMethod method, String testItProject, List<String> manualTestsIds) {
-        TestItApiWrapper testItApiWrapper = getTestItApiWrapper(method.getProject());
+        List<PsiAnnotation> moleLinkAnnotations =
+                createManualLinkAnnotations(psiMethod, TestItProjects.MOLE, autotestSettings.getMoleManualTestsIds());
 
-        return manualTestsIds
-                .stream()
-                .distinct()
-                .map(testItApiWrapper::getWorkItem)
-                .filter(Objects::nonNull)
-                .distinct()
-                .map(workItem -> PsiUtils.createAnnotation(
-                        format("@%s(project=%s, value=\"%s\" /* %s */)", ALLURE_MANUAL_LINK_ANNOTATION, testItProject, workItem.getId(), workItem.getGlobalId()),
-                        method
-                ))
-                .collect(Collectors.toList());
-    }
-
-    public static void createAutoTestAnnotations(PsiMethod testMethod, AutotestDialogSettings autotestSettings) {
-
-        PsiAnnotation tmsLinkAnnotation = createTmsLinkAnnotation(
-                testMethod,
-                autotestSettings.getAutotestExternalId()
-        );
-
-        List<PsiAnnotation> lecsLinkAnnotations = lecsCreateLinkAnnotations(
-                testMethod,
-                TEST_IT_PROJECT_LECS,
-                autotestSettings.getLecsManualTestsIds()
-        );
-
-        List<PsiAnnotation> pmolLinkAnnotations = lecsCreateLinkAnnotations(
-                testMethod,
-                TEST_IT_PROJECT_PMOL,
-                autotestSettings.getPmolManualTestsIds()
-        );
-
-        PsiAnnotation testAnnotation = getTestAnnotation(testMethod);
+        PsiAnnotation testAnnotation = getTestAnnotation(psiMethod);
         if (testAnnotation != null) {
 
             CommandProcessor.getInstance().executeCommand(
-                    testMethod.getProject(),
+                    psiMethod.getProject(),
                     () -> ApplicationManager.getApplication().runWriteAction(() -> {
-                        PsiUtils.addImport(testMethod.getContainingFile(), ALLURE_TMS_LINK_ANNOTATION);
-                        PsiUtils.addImport(testMethod.getContainingFile(), ALLURE_MANUAL_LINK_ANNOTATION);
-                        PsiUtils.addImport(testMethod.getContainingFile(), TEST_IT_PROJECTS);
-                        lecsLinkAnnotations.forEach(annotation -> testMethod.getModifierList().addAfter(annotation, testAnnotation));
-                        pmolLinkAnnotations.forEach(annotation -> testMethod.getModifierList().addAfter(annotation, testAnnotation));
-                        testMethod.getModifierList().addAfter(tmsLinkAnnotation, testAnnotation);
+
+                        PsiUtils.addImport(psiMethod.getContainingFile(), AllureAnnotation.TMS_LINK);
+                        PsiUtils.addImport(psiMethod.getContainingFile(), AllureAnnotation.MANUAL_LINK);
+                        PsiUtils.addImport(psiMethod.getContainingFile(), TestItProjects.PROJECTS);
+
+                        lecsLinkAnnotations.forEach(annotation -> psiMethod.getModifierList().addAfter(annotation, returnExistingOrCurrent(psiMethod, testAnnotation)));
+                        pmolLinkAnnotations.forEach(annotation -> psiMethod.getModifierList().addAfter(annotation, returnExistingOrCurrent(psiMethod, testAnnotation)));
+                        moleLinkAnnotations.forEach(annotation -> psiMethod.getModifierList().addAfter(annotation, returnExistingOrCurrent(psiMethod, testAnnotation)));
+
+                        if (!psiMethod.hasAnnotation(AllureAnnotation.TMS_LINK)) {
+                            psiMethod.getModifierList().addAfter(tmsLinkAnnotation, testAnnotation);
+                        }
                     }),
                     "Create Autotest and add @TmsLink annotation with created UUID",
                     null
@@ -88,12 +59,40 @@ public class AnnotationProcessor {
         }
     }
 
-    public static PsiAnnotation getTestAnnotation(PsiMethod testMethod){
-           PsiAnnotation testAnnotation = testMethod.getAnnotation(JUNIT5_TEST_ANNOTATION);
-           if (testAnnotation == null){
-               testAnnotation = testMethod.getAnnotation(TESTNG_TEST_ANNOTATION);
-           }
+    private static PsiAnnotation returnExistingOrCurrent(PsiMethod psiMethod, PsiAnnotation psiAnnotation) {
+        if (psiMethod.hasAnnotation(AllureAnnotation.TMS_LINK)) {
+            return psiMethod.getAnnotation(AllureAnnotation.TMS_LINK);
+        } else return psiAnnotation;
+    }
 
-        return testAnnotation;
+    private static List<PsiAnnotation> createManualLinkAnnotations(PsiMethod psiMethod, String testItProject, List<String> manualTestsIds) {
+        TestItApiWrapper testItApiWrapper = getTestItApiWrapper(psiMethod.getProject());
+
+        return manualTestsIds.stream()
+                .distinct()
+                .map(testItApiWrapper::getWorkItem)
+                .filter(Objects::nonNull)
+                .distinct()
+                .map(workItem -> PsiUtils.createAnnotation(
+                        format("@%s(project=%s, value=\"%s\" /* %s */)", AllureAnnotation.MANUAL_LINK, testItProject, workItem.getId(), workItem.getGlobalId()),
+                        psiMethod
+                )).collect(Collectors.toList());
+    }
+
+    private static PsiAnnotation createTmsLinkAnnotation(PsiMethod psiMethod, String autotestUuid) {
+        return PsiUtils.createAnnotation(
+                format("@%s(\"%s\")", AllureAnnotation.TMS_LINK, autotestUuid),
+                psiMethod
+        );
+    }
+
+    private static PsiAnnotation getTestAnnotation(PsiMethod psiMethod) {
+        PsiAnnotation psiAnnotation = psiMethod.getAnnotation(TestFrameworkAnnotation.JUNIT5_TEST);
+
+        if (Objects.isNull(psiAnnotation)) {
+            psiAnnotation = psiMethod.getAnnotation(TestFrameworkAnnotation.TESTNG_TEST);
+        }
+
+        return psiAnnotation;
     }
 }

@@ -9,6 +9,4 @@ class TestItApiException extends RuntimeException {
     TestItApiException(String message, Throwable e) {
         super(message, e);
     }
-
-
 }

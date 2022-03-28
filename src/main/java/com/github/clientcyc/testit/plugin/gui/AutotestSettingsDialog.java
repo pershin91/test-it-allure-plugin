@@ -20,6 +20,7 @@ public class AutotestSettingsDialog extends DialogWrapper {
     private JTextField autotestExternalIdField;
     private JTextField lecsManualTestsIdsField;
     private JTextField pmolManualTestsIdsField;
+    private JTextField moleManualTestsIdsField;
 
     AutotestDialogSettings autotestDialogSettings;
 
@@ -67,6 +68,7 @@ public class AutotestSettingsDialog extends DialogWrapper {
         }
         autotestDialogSettings.setLecsManualTestsIds(splitManualIds(lecsManualTestsIdsField));
         autotestDialogSettings.setPmolManualTestsIds(splitManualIds(pmolManualTestsIdsField));
+        autotestDialogSettings.setMoleManualTestsIds(splitManualIds(moleManualTestsIdsField));
     }
 
     private List<String> splitManualIds(JTextField manualIds) {

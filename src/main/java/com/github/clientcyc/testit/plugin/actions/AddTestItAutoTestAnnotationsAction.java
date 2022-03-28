@@ -15,6 +15,7 @@ public class AddTestItAutoTestAnnotationsAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         final PsiElement element = event.getData(PlatformDataKeys.PSI_ELEMENT);
+
         if (element instanceof PsiMethod) {
 
             AutotestDialogSettings autoTestDialogSettings = new AutotestDialogSettings();
@@ -22,6 +23,7 @@ public class AddTestItAutoTestAnnotationsAction extends AnAction {
                     event.getProject(),
                     autoTestDialogSettings
             );
+
             autotestSettingsDialog.show();
 
             if (autotestSettingsDialog.isOK()) {

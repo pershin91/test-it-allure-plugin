@@ -2,21 +2,19 @@ package com.github.clientcyc.testit.api;
 
 import com.github.clientcyc.testit.api.client.TestItApiClientBuilder;
 import com.github.clientcyc.testit.api.model.AutoTest;
-import com.github.clientcyc.testit.plugin.settings.PluginSettings;
 import com.github.clientcyc.testit.api.model.WorkItem;
-import com.intellij.notification.Notification;
+import com.github.clientcyc.testit.plugin.settings.PluginSettings;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
 
 public class TestItApiWrapper {
-
     private final ITestItApiClient testItApiClient;
     private final PluginSettings settings;
 
-
-    public static TestItApiWrapper
-    getTestItApiWrapper(Project project) {
+    public static TestItApiWrapper getTestItApiWrapper(Project project) {
         PluginSettings pluginSettings = PluginSettings.getInstance(project);
         return new TestItApiWrapper(pluginSettings);
     }
@@ -44,32 +42,10 @@ public class TestItApiWrapper {
             return testItApiClient.getWorkItem(id);
         } catch (Exception e) {
             Notifications.Bus.notify(
-                    new Notification(
-                            "TestIt.Plugin",
-                            "Get Test-It manual test info",
-                            "There is no manual test with id: " + id,
-                            NotificationType.WARNING)
+                    new NotificationGroup("TestIt.Plugin", NotificationDisplayType.BALLOON, true)
+                            .createNotification("Get Test-It manual test info", "There is no manual test with id: " + id, NotificationType.WARNING, null)
             );
             return null;
         }
-
     }
-
-    public static void main(String[] args) {
-        PluginSettings settings = new PluginSettings();
-        settings.setServerUrl("https://testit.corp.dev.vtb/");
-        settings.setProjectId(5778);
-        settings.setApiKey("MWpkVnZ0UUhQM2ZtSmVoa0x6");
-
-        TestItApiWrapper wrapper = new TestItApiWrapper(settings);
-
-        AutoTest autoTest = wrapper.createAutoTest(
-                AutoTest.builder()
-                        .projectId(String.valueOf(settings.getProjectId()))
-                        .name("Check")
-                        .build()
-        );
-        System.out.println(autoTest.getId());
-    }
-
 }
